@@ -6,6 +6,11 @@ from torch import nn
 import requests
 import zipfile
 from pathlib import Path
+import matplotlib.pyplot as plt
+import numpy as np
+from torch.utils.data import DataLoader
+from torchvision import datasets, transforms
+
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
@@ -37,15 +42,32 @@ def walk_through_dir(dir_path):
             f"There are {len(dirnames)} directories and {len(filenames)} images in '{dirpath}'."
         )
 
+
 # walk_through_dir(image_path)
 
 train_dir = image_path / "train"
 test_dir = image_path / "test"
 
 random.seed(42)
-
-image_path_list = list(image_path.glob("*/*/*.jpg")
+image_path_list = list(image_path.glob("*/*/*.jpg"))
 random_image_path = random.choice(image_path_list)
-
 image_class = random_image_path.parent.stem
+img = Image.open(random_image_path)
 
+# img.show()
+# print(f"Random image path: {random_image_path}")
+# print(f"Image class: {image_class}")
+# print(f"Image height: {img.height}")
+# print(f"Image width: {img.width}")
+
+# img_as_array = np.asarray(img)
+# plt.figure(figsize=(10, 7))
+# plt.imshow(img_as_array)
+# plt.axis(False)
+# plt.show()
+
+data_transform = transforms.Compose([
+    transforms.Resize(size=(64,64)),
+    transforms.RandomHorizontalFlip(p=0.5),
+    transforms.
+])
