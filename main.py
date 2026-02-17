@@ -66,8 +66,10 @@ img = Image.open(random_image_path)
 # plt.axis(False)
 # plt.show()
 
-data_transform = transforms.Compose([
-    transforms.Resize(size=(64,64)),
-    transforms.RandomHorizontalFlip(p=0.5),
-    transforms.
-])
+data_transform = transforms.Compose(
+    [
+        transforms.Resize(size=(64, 64)),
+        transforms.RandomHorizontalFlip(p=0.5),
+        transforms.ToTensor(),
+    ]
+)
