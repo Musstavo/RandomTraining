@@ -1,5 +1,6 @@
 import os
 import random
+import pathlib
 from PIL import Image
 import torch
 from torch import nn
@@ -10,7 +11,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
-
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
@@ -101,13 +101,25 @@ train_data = datasets.ImageFolder(
 )
 
 test_data = datasets.ImageFolder(root=test_dir, transform=data_transform)
-
 class_names = train_data.classes
-img, label = train_data[0][0], train_data[0][1]
 
-img_permute = img.permute(1, 2, 0)
-plt.figure(figsize=(10, 7))
-plt.imshow(img.permute(1, 2, 0))
-plt.axis("off")
-plt.title(class_names[label], fontsize=14)
-plt.show()
+# img, label = train_data[0][0], train_data[0][1]
+#
+# img_permute = img.permute(1, 2, 0)
+# plt.figure(figsize=(10, 7))
+# plt.imshow(img.permute(1, 2, 0))
+# plt.axis("off")
+# plt.title(class_names[label], fontsize=14)
+# plt.show()
+
+train_dataloader = DataLoader(
+    dataset=train_data, batch_size=6, num_workers=1, shuffle=True
+)
+test_dataloader = DataLoader(
+    dataset=test_data, batch_size=6, num_workers=1, shuffle=False
+)
+
+train_features_batch, train_labels_batch = next(iter(train_dataloader))
+
+# (homeless way of not using ImageFolder imaginign it's a custom dataset, wallah i'm cooked)
+target_dir = train_dir
