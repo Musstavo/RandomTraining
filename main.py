@@ -119,7 +119,18 @@ test_dataloader = DataLoader(
     dataset=test_data, batch_size=6, num_workers=1, shuffle=False
 )
 
-train_features_batch, train_labels_batch = next(iter(train_dataloader))
 
 # (homeless way of not using ImageFolder imaginign it's a custom dataset, wallah i'm cooked)
-target_dir = train_dir
+def find_classes(directory):
+    classes = sorted(entry.name for entry in list(os.scandir(directory)))
+    if not classes:
+        raise FileNotFoundError("no classes found in this directory")
+    class_to_idx = {cls_name: i for i, cls_name in enumerate(classes)}
+    return classes, class_to_idx
+
+
+class ImageFolderCustom(Dataset):
+    def __init__(self, target_dir, transform):
+        self.paths = list(pathlib.Path(target_dir).glob("*/*.jpg"))
+        self.transform = transform
+        self.classes, self.class_to_idx = find_classes(target_dir)
